@@ -1,0 +1,103 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cross Validation Results</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'predictive-chart.ico' %}">
+    <link rel="stylesheet" href="{% static 'result.css' %}">
+    <a href="{% url 'index' %}"><button>Back</button></a>
+    <!-- Load Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <div id="container">
+        <a href="{% url 'index' %}"><button>Back</button></a>
+        <h1 style="text-align: center;">Results</h1>
+        <h2>Uploaded Dataset</h2>
+        <table>
+            <tr>
+                {% for column_name in dataset_columns %}
+                <th>{{ column_name }}</th>
+                {% endfor %}
+            </tr>
+            {% for row in dataset_items %}
+            <tr>
+                {% for value in row %}
+                <td>{{ value }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Individual Fold Accuracies</h2>
+            <table>
+                <tr>
+                    <th>Algorithm</th>
+                    {% for fold_number in fold_range %}
+                    <th>Fold {{ fold_number }}</th>
+                    {% endfor %}
+                </tr>
+                {% for algorithm, fold_accuracies in individual_fold_accuracies %}
+                    <tr>
+                        <td>{{ algorithm }}</td>
+                        {% for accuracy in fold_accuracies %}
+                            <td>{{ accuracy|floatformat:4 }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+
+        <h2>Average Accuracy</h2>
+        <table>
+            <tr>
+                <th>Algorithm</th>
+                <th>Average Accuracy</th>
+            </tr>
+            {% for algorithm, average_accuracy in average_accuracies %}
+            <tr>
+                <td>{{ algorithm }}</td>
+                <td>{{ average_accuracy|floatformat:4 }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Line Graph: Algorithm Accuracies</h2>
+        <div id="line-chart"></div>
+    </div>
+
+    <script>
+        // Extract algorithm names and accuracies for the line chart
+        var algorithmAccuracies = JSON.parse('{{ algorithm_accuracies|escapejs }}');
+        var algorithmNames = JSON.parse('{{ algorithm_names|escapejs }}');
+
+        // Create a trace for the line chart
+        var trace = {
+            x: algorithmNames,
+            y: algorithmAccuracies,
+            type: 'scatter',
+            mode: 'lines+markers',
+            marker: { size: 10 },
+            line: { shape: 'linear' }
+        };
+
+        // Layout for the line chart
+        var layout = {
+            title: 'Algorithm Accuracies',
+            xaxis: { title: 'Algorithms' },
+            yaxis: { title: 'Accuracy' },
+            showlegend: false
+        };
+
+        // Plot the line chart
+        Plotly.newPlot('line-chart', [trace], layout, { responsive: true });
+    </script>
+</body>
+
+</html>

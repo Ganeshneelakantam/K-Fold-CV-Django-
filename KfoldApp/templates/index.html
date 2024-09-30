@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="description"
+        content="Perform K-Fold Cross Validation on your dataset and evaluate machine learning models effortlessly.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K-Fold Cross Validation</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'predictive-chart.ico' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'index' %}">K Fold Cross Validation</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#about">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#predict">Explore</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'documentation' %}">Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="main">
+        <section class="content">
+            <h2>The New Standard</h2>
+            <h2>in Data Analysis</h2>
+            <h4>Use Data to Get a Prediction</h4>
+            <h4>View of Your Dataset</h4>
+            <a href="{% url 'documentation' %}"><button class="doc">Learn More</button></a>
+        </section>
+
+        <div class="gif">
+            <img
+                src="https://cdn.dribbble.com/users/20368/screenshots/4012238/media/f75db1b2b21e31c269b74c259564d19f.gif">
+        </div>
+    </div>
+    <section class="content-2">
+        <div class="explore-text">
+            <h2>Explore Your Dataset Here</h2>
+            <p>Upload your dataset and configure the parameters to perform K-Fold Cross Validation. Gain insights and
+                evaluate machine learning models effortlessly.</p>
+            <p style="color: yellow; margin-left: 10%;">Note: Upload Structured Numeric Dataset Only </p>
+        </div>
+
+        <!-- Add the modal HTML code here -->
+        <div id="error-modal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="error-message-text"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add this modal HTML code after the error modal -->
+        <div id="upload-warning-modal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Upload your dataset.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Add the modal HTML code after the upload-warning-modal -->
+        <div id="folds-warning-modal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Number of folds must be greater than or equal to 3 Folds.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Add this div section after the upload-warning-modal -->
+        <div id="random-state-warning-modal" class="modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Warning</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Random state must be a positive Number.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <form id="predict" align="center" action="{% url 'upload' %}" method="POST" enctype="multipart/form-data"
+            class="form-transition">
+            {% csrf_token %}
+            <label for="file">Upload Dataset (CSV only)</label>
+            <input type="file" id="file" name="file" accept=".csv" required>
+
+            <!-- Add modal pop-ups for each input field -->
+            <div id="folds-info-modal" class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Number of Folds</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>The number of folds determines how many subsets the dataset will be split into for
+                                cross-validation. It should be a positive integer greater than or equal to 3.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="kernel-info-modal" class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Select Kernel</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>The kernel determines the type of decision boundary used by the Support Vector Machine
+                                (SVM) algorithm. Choose the kernel based on the characteristics of your dataset.
+                                <br>
+                                1. Linear: This makes a straight line to split the data. It's good when the groups are
+                                neatly separated by a line.
+                                <br>
+                                2. Polynomial (Poly): This draws a curved line, useful when the groups have a more
+                                complex
+                                relationship.
+                                <br>
+                                3. Radial Basis Function (RBF): This creates a wavy line, great for separating groups
+                                with
+                                intricate patterns.
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="random-state-info-modal" class="modal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Random State</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>The random state is used as the seed for the random number generator in the SVM
+                                algorithm. It ensures reproducibility of results. You can choose any integer value.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <label for="folds">Number of Folds:</label>
+            <div class="input-container">
+                <input type="number" id="folds" name="folds" min="3" placeholder="Enter Greater than 3 Only" value="5"
+                    required>
+                <span class="info-icon" onclick="showModal('folds-info-modal')"><span
+                        class="info-symbol">ℹ</span></span>
+            </div>
+
+            <label for="kernel">Select Kernel:</label>
+            <div class="input-container">
+                <select id="kernel" name="kernel" required>
+                    <option value="linear">Linear</option>
+                    <option value="poly">Poly</option>
+                    <option value="rbf">Radial Bias Function (RDF)</option>
+                </select>
+                <span class="info-icon" onclick="showModal('kernel-info-modal')"><span
+                        class="info-symbol">ℹ</span></span>
+            </div>
+
+            <label for="random_state">Random State:</label>
+            <div class="input-container">
+                <input type="number" id="random_state" name="random_state" value="42" required>
+                <span class="info-icon" onclick="showModal('random-state-info-modal')"><span
+                        class="info-symbol">ℹ</span></span>
+            </div>
+
+
+            <button type="submit" onclick="validateAndSubmit()">Submit</button>
+        </form>
+
+        <!-- Error Modal -->
+        <div id="error-modal" class="modal fade" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p id="error-message-text"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- JavaScript to handle modals -->
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const urlParams = new URLSearchParams(window.location.search);
+                const errorMessage = urlParams.get('error_message');
+                if (errorMessage) {
+                    var errorMessageText = document.getElementById('error-message-text');
+                    errorMessageText.textContent = decodeURIComponent(errorMessage);
+                    var errorModal = new bootstrap.Modal(document.getElementById('error-modal'));
+                    errorModal.show();
+                }
+            });
+        </script>
+
+        <script>
+            {% if error_message %}
+            document.addEventListener('DOMContentLoaded', function () {
+                var errorMessage = "{{ error_message }}";
+                var errorMessageText = document.getElementById('error-message-text');
+                errorMessageText.textContent = errorMessage;
+                var myModal = new bootstrap.Modal(document.getElementById('error-modal'));
+                myModal.show();
+
+                // Close modal when close button is clicked
+                var closeButton = document.querySelector('.btn-close');
+                closeButton.addEventListener('click', function () {
+                    myModal.hide();
+                    window.location.href = '/'; // Redirect back to the form
+                });
+
+                // Close modal when backdrop is clicked
+                var modalBackdrop = document.querySelector('.modal-backdrop');
+                modalBackdrop.addEventListener('click', function () {
+                    myModal.hide();
+                    window.location.href = '/'; // Redirect back to the form
+                });
+            });
+            {% endif %}
+        </script>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                // Display upload warning modal when submit button is clicked without uploading a dataset
+                var submitButton = document.querySelector('button[type="submit"]');
+                submitButton.addEventListener('click', function (event) {
+                    var fileInput = document.getElementById('file');
+                    if (fileInput.files.length === 0) {
+                        event.preventDefault(); // Prevent form submission
+                        var uploadWarningModal = new bootstrap.Modal(document.getElementById('upload-warning-modal'));
+                        uploadWarningModal.show();
+                    }
+                });
+            });
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Display folds warning modal when submit button is clicked with invalid folds value
+                var submitButton = document.querySelector('button[type="submit"]');
+                submitButton.addEventListener('click', function (event) {
+                    var foldsInput = document.getElementById('folds');
+                    var folds = parseInt(foldsInput.value);
+                    if (folds < 3 || isNaN(folds)) {
+                        event.preventDefault(); // Prevent form submission
+                        var foldsWarningModal = new bootstrap.Modal(document.getElementById('folds-warning-modal'));
+                        foldsWarningModal.show();
+                    }
+                });
+            });
+
+
+            document.addEventListener('DOMContentLoaded', function () {
+                // Display random state warning modal when submit button is clicked with invalid random state value
+                var submitButton = document.querySelector('button[type="submit"]');
+                submitButton.addEventListener('click', function (event) {
+                    var randomStateInput = document.getElementById('random_state');
+                    var randomState = parseInt(randomStateInput.value);
+                    if (randomState <= 0 || isNaN(randomState)) {
+                        event.preventDefault(); // Prevent form submission
+                        var randomStateWarningModal = new bootstrap.Modal(document.getElementById('random-state-warning-modal'));
+                        randomStateWarningModal.show();
+                    }
+                });
+            });
+
+            // JavaScript function to show the modal
+            function showModal(modalId) {
+                var modal = new bootstrap.Modal(document.getElementById(modalId));
+                modal.show();
+            }
+
+
+        </script>
+    </section>
+
+    <script src="{% static 'script.js' %}"></script>
+
+
+    <footer class="site-footer mt-5" id="about">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-9">
+                    <h6>About</h6>
+                    <p class="text-justify">K Fold Cross Validation, your gateway to streamlined machine
+                        learning predictions. Our project is dedicated to simplifying the complex world of machine
+                        learning and making it accessible to everyone. Whether you're a seasoned data scientist or a
+                        curious beginner, our platform is designed to empower you on your data-driven journey.</p>
+                </div>
+
+            </div>
+            <hr class="small">
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8 col-sm-6 col-12">
+                    <p class="copyright-text">Copyright © 2024 All Rights Reserved by
+                        <a href="#"><span class="logo">GANESH.</span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

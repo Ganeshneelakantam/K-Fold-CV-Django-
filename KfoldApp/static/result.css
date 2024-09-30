@@ -1,0 +1,84 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: hsla(221, 45%, 73%, 1);
+    background: linear-gradient(90deg, hsla(221, 45%, 73%, 1) 0%, hsla(220, 78%, 29%, 1) 100%);
+    background: -moz-linear-gradient(90deg, hsla(221, 45%, 73%, 1) 0%, hsla(220, 78%, 29%, 1) 100%);
+    background: -webkit-linear-gradient(90deg, hsla(221, 45%, 73%, 1) 0%, hsla(220, 78%, 29%, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient(startColorstr="#9BAFD9", endColorstr="#103783", GradientType=1);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    min-height: 100vh;
+}
+
+#container {
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-left: 10%; 
+    margin-right: auto; 
+}
+
+a{
+    text-decoration: none;
+    color: white;
+}
+
+button {
+    margin-top:1%;
+    background-color:#275A93;
+    color: #fff;
+    padding: 6px 16px 6px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bolder;
+    width: 15%;
+}
+
+button:hover {
+    background-color: whitesmoke;
+    color: #275A93;
+}
+
+#accuracy, h1{
+    margin-left: 20%;
+}
+
+h1,
+h2,
+p,
+li,
+th,
+td {
+    color: #fffefe;
+}
+
+table {
+    width: 100%;
+    border-radius: 20px;
+    overflow: hidden;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border: 1px  solid #ddd;  
+}
+
+th {
+    background-color: hsl(121, 50%, 57%);
+    color: #fff;
+}
+
+#line-chart {
+    margin-top: 20px;
+    height: auto;
+    width: 120%;
+}

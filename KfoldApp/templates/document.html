@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="{% static 'predictive-chart.ico' %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'doc_style.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+    <title>Documentation</title>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'index' %}">K Fold Cross Validation</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'documentation' %}">Documentation</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- <h1 align="center">Welcome to Documentation</h1> -->
+    <div class="container">
+        <div class="jumbotron mb-4">
+            <div class="heading mb-5" id="heading">
+                <h1 class="display-4 text-center">K Fold Cross Validation</h1>
+                <p class="lead text-center">Explore the power of K-Fold Cross Validation in evaluating machine learning
+                    models.</p>
+            </div>
+            <hr style="border: solid rgb(43, 42, 42);">
+        </div>
+        <section id="what-is-cv">
+            <h3 class="mb-3">What is Cross Validation?</h3>
+            <p>
+                <b>Cross-validation</b> is a technique for evaluating a machine learning model and testing its
+                performance. CV
+                is commonly used in applied ML tasks. It helps to compare and select an appropriate model for the
+                specific predictive modeling problem.<br>
+            </p>
+
+            <p>CV is easy to understand, easy to implement, and it tends to have a lower bias than other methods used
+                to count the model's efficiency scores. All this makes cross-validation a powerful tool for selecting
+                the best model for the specific task.<br></p>
+            <h3>Inner Working of Cross Validation </h3>
+            <ul>
+                <li>Shuffle the dataset in order to remove any kind of order.</li>
+                <li>Split the data into K number of folds. K= 5 or 10 will work for most of the cases.</li>
+                <li>Now keep one fold for testing and remaining all the folds for training.</li>
+                <li>Train(fit) the model on train set and test(evaluate) it on test set and note down the results for
+                    that split</li>
+                <li>Now repeat this process for all the folds, every time choosing separate fold as test data.</li>
+                <li>So for every iteration our model gets trained and tested on different sets of data.</li>
+                <li>At the end sum up the scores from each split and get the mean score.</li>
+            </ul>
+            <img class="fold" src="https://raw.githubusercontent.com/satishgunjal/images/master/Inner_Working_KFold.png"
+                alt="Cross-Validation" width="50%"
+                style="padding: 2.5%; background-color: rgba(185, 177, 232, 0.418); border-radius: 10px; margin-bottom: 1%;">
+            <p>There are a lot of different techniques that may be used to cross-validate a model. Still, all of them
+                have a similar algorithm:<br></p>
+            <ol>
+                <li>Divide the dataset into two parts: one for training, other for testing</li>
+                <li>Train the model on the training set</li>
+                <li> Validate the model on the test set</li>
+                <li> Repeat 1-3 steps a couple of times. This number depends on the CV method that you are using</li>
+            </ol>
+
+            <p>As you may know, there are plenty of CV techniques. Some of them are commonly used, others work only in
+                theory. Right now in this documentation we will only discuss <b>K Fold Cross Validation</b>.</p>
+        </section>
+        <section id="what-is-k-fold">
+            <h3>k-Fold cross-validation</h3>
+            <p>k-Fold cross-validation is a technique that minimizes the disadvantages of the hold-out method. k-Fold
+                introduces a new way of splitting the dataset which helps to overcome the “test only once bottleneck”.
+            </p>
+
+            <p>The algorithm of the k-Fold technique:</p>
+            <ol>
+                <li>Pick a number of folds - k. Usually, k is 5 or 10 but you can choose any number which is less than
+                    the
+                    dataset's length.</li>
+                <li>Split the dataset into k equal (if possible) parts (they are called folds).</li>
+                <li>Choose k - 1 folds as the training set. The remaining fold will be the test set.</li>
+                <li>Train the model on the training set. On each iteration of cross-validation, you must train a new
+                    model
+                    independently of the model trained on the previous iteration</li>
+                <li> Validate on the test set</li>
+                <li>Save the result of the validation</li>
+                <li>Repeat steps 3 - 6 k times. Each time use the remaining fold as the test set. In the end, you should
+                    have validated the model on every fold that you have.</li>
+                <li>To get the final score average the results that you got on step 6.</li>
+            </ol>
+            <img class="fold"
+                src="https://raw.githubusercontent.com/satishgunjal/images/master/KFold_Cross_Validation.png"
+                alt="Cross-Validation" width="45%" style="padding-bottom: 3%;">
+        </section>
+        <section id="cv-in-ml ">
+            <h3>Cross-validation in Machine Learning</h3>
+            <p> When is cross-validation the right choice?</p>
+
+            <p>Although doing cross-validation of your trained model can never be termed as a bad choice, there are
+                certain scenarios in which cross-validation becomes an absolute necessity:</p>
+            <ol>
+                <li>Limited dataset
+                    <p>Let's say we have 100 data points and we are dealing with a multi-class classification problem
+                        with 10 classes, this averages out to ~10 examples per class. In an 80-20 train-test split, this
+                        number
+                        would go down even further to 8 samples per class for training. The smart thing to do here would
+                        be to
+                        use cross-validation and utilize our entire dataset for training as well as testing.</p>
+                </li>
+                <li>Dependent data points
+                    <p>When we perform a random train-test split of our data, we assume that our examples are
+                        independent.
+                        It means that knowing some instances will not help us understand other instances. However,
+                        that's
+                        not always the case, and in such situations, it's important that our model gets familiar with
+                        the
+                        entire dataset which is possible with cross-validation.</p>
+                </li>
+
+                <li>Cons of single metric
+                    <p>In the absence of cross-validation, we only get a single value of accuracy or precision or recall
+                        which could be an outcome of chance. When we train multiple models, we eliminate such
+                        possibilities and get a metric per model which results in robust insights.</p>
+                </li>
+
+                <li>Hyperparameter tuning
+                    <p>Although there are many methods to tune the hyperparameters of your model such as grid search,
+                        Bayesian optimization, etc., this exercise can't be done on training or test set, and a need for
+                        a validation set arises. Thus, we fall back to the same splitting problem that we have discussed
+                        above and cross-validation can help us out of this.</p>
+                </li>
+            </ol>
+        </section>
+        <section id="cv-in-dl">
+            <h3>Cross-validation in Deep Learning</h3>
+            <p>Cross-validation in Deep Learning (DL) might be a little tricky because most of the CV techniques require
+                training the model at least a couple of times.</p>
+
+            <p>In deep learning, you would normally tempt to avoid CV because of the cost associated with training k
+                different models. Instead of doing k-Fold or other CV techniques, you might use a random subset of your
+                training data as a hold-out for validation purposes.</p>
+
+            <p>For example, Keras deep learning library allows you to pass one of two parameters for the fit function
+                that
+                performs training.</p>
+            <ol>
+                <li>validation_split: percentage of the data that should be held out for validation.</li>
+                <li>validation_data: a tuple of (X, y) which should be used for validation. This parameter overrides the
+                    validation_split parameter which means you can use only one of these parameters at once.</li>
+            </ol>
+            <p>The same approach is used in official tutorials of other DL frameworks such as PyTorch and MxNet. They
+                also
+                suggest splitting the dataset into three parts: training, validation, and testing.</p>
+            <ol>
+                <li>Training - a part of the dataset to train on.</li>
+                <li>Validation - a part of the dataset to validate on while training.</li>
+                <li>Testing - a part of the dataset for final validation of the model.</li>
+            </ol>
+            <p>Still, you can use cross-validation in DL tasks if the dataset is tiny (contains hundreds of samples). In
+                this case, learning a complex model might be an irrelevant task so make sure that you don't complicate
+                the
+                task further.</p>
+        </section>
+
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var heading = document.getElementById('heading');
+                var isHeadingVisible = false;
+
+                function isElementInViewport(el) {
+                    var rect = el.getBoundingClientRect();
+                    return (
+                        rect.top >= 0 &&
+                        rect.left >= 0 &&
+                        rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+                        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+                    );
+                }
+
+                function handleScroll() {
+                    var isVisible = isElementInViewport(heading);
+
+                    if (isVisible && !isHeadingVisible) {
+                        heading.classList.add('show');
+                        isHeadingVisible = true;
+                    } else if (!isVisible && isHeadingVisible) {
+                        heading.classList.remove('show');
+                        isHeadingVisible = false;
+                    }
+                }
+
+                window.addEventListener('scroll', handleScroll);
+                handleScroll(); // Check on initial load
+            });
+
+
+        </script>
+
+        <footer class="site-footer mt-5" style="margin-bottom: 0;">     
+
+            <hr class="small">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-8 col-sm-6 col-12">
+                        <p class="copyright-text">Copyright © 2024 All Rights Reserved by
+                            <a href="#"><span class="logo">GANESH.</span></a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+        </footer>
+</body>
+
+</html>
